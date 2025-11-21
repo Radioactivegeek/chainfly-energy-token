@@ -3,7 +3,7 @@ import { BrowserProvider, Contract, formatUnits, parseUnits } from "ethers";
 import { CET_TOKEN_ABI } from "./abi/cetToken";
 import "./App.css";
 
-const CONTRACT_ADDRESS = import.meta.env.VITE_CET_CONTRACT_ADDRESS || "";
+const CONTRACT_ADDRESS = import.meta.env.VITE_CET_CONTRACT_ADDRESS || "0x77f676eEd95f7752C8e76287cd386ed63218f71d";
 
 const DEFAULT_DECIMALS = 18;
 const EVENT_LOOKBACK_BLOCKS = 200000;
