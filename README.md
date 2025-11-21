@@ -40,7 +40,44 @@ npx hardhat verify --network polygonAmoy <DEPLOYED_ADDRESS> <OWNER_ADDRESS>
 - Initial supply: `1,000,000 CET` minted to owner; mint/burn/cashback gated by `onlyOwner`
 
 ## Tech Stack
-- Hardhat 2.26.0 (`@nomicfoundation/hardhat-toolbox`)
-- Ethers v6, Hardhat Verify (Etherscan API v2 config)
-- OpenZeppelin Contracts 5.x
-- Testing stack 5
+- Hardhat 2.26.0 (`@nomicfoundation/hardhat-toolbox` + Verify v2)
+- Ethers v6 for both scripts/tests and the dApp
+- OpenZeppelin Contracts 5.x (ERC-20, Burnable, Ownable)
+- React 19 + Vite 7 frontend (`frontend/`)
+- Jest-style Hardhat tests (Mocha + Chai)
+
+## Frontend dApp (`frontend/`)
+```bash
+cd frontend
+npm install
+echo "VITE_CET_CONTRACT_ADDRESS=0x77f676eEd95f7752C8e76287cd386ed63218f71d" > .env
+npm run dev                     # launches http://localhost:5173
+```
+- Connect MetaMask to Polygon Amoy (chainId 80002).
+- Dashboard shows token metadata, total supply, wallet balance, and owner address.
+- Built-in flows: wallet connect, refresh state, burn CET from connected account, owner-only cashback minting UI.
+- Update `VITE_CET_CONTRACT_ADDRESS` whenever a new deployment goes live.
+
+## Automated Tests
+```bash
+npm install        # root
+npx hardhat test   # runs CETToken suite (6 specs) + template Lock tests
+```
+Coverage includes:
+- Initial supply assigned to owner
+- Owner-only guards for `mint`, `giveCashback`, `burnFrom`
+- User burn flow + event assertions
+- Cashback minting emits `Cashback` event and credits balances
+
+## Next Phase Goals
+1. Replace placeholder Lock tests with CET-only coverage and add gas snapshots.
+2. Expand React dashboard with historical cashback feed + energy metrics.
+3. Wire MetaMask actions into future Chainfly backend (wallet API, staking).
+4. Prep for third-party audit + mainnet config (Polygon mainnet network + verify).
+
+## Future Integrations
+1. Chainfly Wallet API for cashback + payment tracking
+2. Energy Points → CET converter
+3. Staking module & liquidity incentives
+4. dApp dashboard (balances, rewards, burn history)
+5. External smart-contract audit pre-mainnet launch
